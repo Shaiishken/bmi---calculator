@@ -1,33 +1,44 @@
 const express = require('express');
 const app = express();
 
-app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('BMI Calculator API is running');
+  res.sendFile(__dirname + '/public/index.html');
 });
 
-app.post('/bmi', (req, res) => {
-  const { weight, height } = req.body;
+app.post('/calculate-bmi', (req, res) => {
+  const weight = parseFloat(req.body.weight);
+  const height = parseFloat(req.body.height);
 
-  if (!weight || !height) {
-    return res.status(400).json({
-      error: 'Please provide weight and height'
-    });
+  if (weight <= 0 || height <= 0) {
+    return res.send('<h3>Invalid input. Weight and height must be positive.</h3><a href="/">Back</a>');
   }
 
   const bmi = weight / (height * height);
+  let category = '';
+  let color = '';
 
-  let category;
-  if (bmi < 18.5) category = 'Underweight';
-  else if (bmi < 25) category = 'Normal';
-  else if (bmi < 30) category = 'Overweight';
-  else category = 'Obese';
+  if (bmi < 18.5) {
+    category = 'Underweight';
+    color = 'blue';
+  } else if (bmi < 24.9) {
+    category = 'Normal weight';
+    color = 'green';
+  } else if (bmi < 29.9) {
+    category = 'Overweight';
+    color = 'orange';
+  } else {
+    category = 'Obese';
+    color = 'red';
+  }
 
-  res.json({
-    bmi: bmi.toFixed(2),
-    category
-  });
+  res.send(`
+    <h2>Your BMI: ${bmi.toFixed(2)}</h2>
+    <h3 style="color:${color}">Category: ${category}</h3>
+    <a href="/">Calculate again</a>
+  `);
 });
 
 app.listen(3000, () => {
