@@ -7,7 +7,7 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-
+  
 app.post('/calculate-bmi', (req, res) => {
   const weight = parseFloat(req.body.weight);
   const height = parseFloat(req.body.height);

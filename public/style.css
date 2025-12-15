@@ -26,3 +26,30 @@ button {
   border: none;
   cursor: pointer;
 }
+
+.bmi-info {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.bmi-info ul {
+  padding-left: 20px;
+}
+
+.under {
+  color: blue;
+}
+
+.normal {
+  color: green;
+}
+
+.over {
+  color: orange;
+}
+
+.obese {
+  color: red;
+}
+
